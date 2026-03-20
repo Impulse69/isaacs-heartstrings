@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useGameState } from "@/hooks/useGameState";
 import HomeScreen from "@/components/HomeScreen";
 import GameScreen from "@/components/GameScreen";
@@ -12,6 +12,15 @@ export default function Index() {
   const [playing, setPlaying] = useState(false);
   const [showInbox, setShowInbox] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+
+  // Toggle Dark Mode for Isaac
+  useEffect(() => {
+    if (game.playerRole === "isaac") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [game.playerRole]);
 
   if (!game.loaded) {
     return (

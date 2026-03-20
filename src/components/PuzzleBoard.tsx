@@ -98,9 +98,16 @@ export default function PuzzleBoard({ onSolved, roundNumber }: PuzzleBoardProps)
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center justify-between w-full max-w-[320px] px-1">
+      <div className="flex items-center justify-between w-full max-w-[288px] sm:max-w-[324px] px-1 mb-2">
         <span className="text-sm text-muted-foreground">Tap two pieces to swap</span>
-        <span className="text-sm font-medium text-muted-foreground">{moveCount} moves</span>
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-medium text-muted-foreground">{moveCount} moves</span>
+          <img 
+            src={currentImage} 
+            alt="Reference Image" 
+            className="w-10 h-10 rounded-md border shadow-sm opacity-90 object-cover pointer-events-none" 
+          />
+        </div>
       </div>
 
       <div className="relative">
