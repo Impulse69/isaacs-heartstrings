@@ -1,7 +1,7 @@
 # Architecture Overview
 
 ## Executive Summary
-Isaac Love Quests is a highly interactive, personalized web application designed to track user progress through various quiz categories and minigames. It is built as a Single Page Application (SPA).
+Isaac's Heartstrings is a highly interactive, personalized web application designed to track user progress through various quiz categories and minigames. It is built as a Single Page Application (SPA).
 
 ## Technology Stack
 - **Frontend Framework**: React 18

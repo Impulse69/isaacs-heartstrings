@@ -30,9 +30,9 @@ export default function HomeScreen({
       <div className="flex flex-col items-center gap-3 mb-10 animate-fade-in">
         <span className="text-5xl">🧩</span>
         <h1 className="text-3xl sm:text-4xl font-bold text-foreground text-balance text-center leading-tight tracking-tight">
-          Isaac & Ella's
+          Isaac's
           <br />
-          <span className="text-primary">Puzzle Quest</span>
+          <span className="text-primary">Heartstrings</span>
         </h1>
         <p className="text-muted-foreground text-center max-w-xs text-sm leading-relaxed">
           Solve puzzles together. Unlock questions about each other — and test your Bible knowledge too.
