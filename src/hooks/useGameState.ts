@@ -114,10 +114,14 @@ export function useGameState() {
     setOrder(newOrder);
     setAnsweredIds([]);
     setCurrentIndex(0);
+  }, [allQuestions]);
+
+  const signOut = useCallback(() => {
     setGameMode(null);
     setPlayerRole(null);
     setPin(null);
-    localStorage.removeItem(STORAGE_KEY);
+    // Let the useEffect save the updated state (which handles removing identity but keeping progress)
+    // Actually, if we just set state, the useEffect will persist the nulls.
   }, []);
 
   const selectMode = useCallback((mode: GameMode) => {
@@ -140,6 +144,7 @@ export function useGameState() {
     currentQuestion,
     markAnswered,
     resetGame,
+    signOut,
     selectMode,
     verifyIdentity,
     totalAnswered,

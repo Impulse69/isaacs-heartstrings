@@ -46,6 +46,7 @@ export default function Index() {
         isComplete={game.isComplete}
         onStart={() => setPlaying(true)}
         onReset={game.resetGame}
+        onSignOut={game.signOut}
         gameMode={game.gameMode}
         playerRole={game.playerRole}
         onOpenInbox={() => setShowInbox(true)}

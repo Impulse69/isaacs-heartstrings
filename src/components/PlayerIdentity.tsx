@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Heart, Lock, User, UserCheck } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface PlayerIdentityProps {
   onVerify: (role: "isaac" | "ella", pin: string) => void;
@@ -14,11 +15,12 @@ interface PlayerIdentityProps {
 export const PlayerIdentity: React.FC<PlayerIdentityProps> = ({ onVerify }) => {
   const [selectedRole, setSelectedRole] = useState<"isaac" | "ella" | null>(null);
   const [pin, setPin] = useState("");
+  const [isVerifying, setIsVerifying] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedRole) return;
+    if (!selectedRole || isVerifying) return;
     if (pin.length < 4) {
       toast({
         title: "PIN too short",
@@ -27,9 +29,56 @@ export const PlayerIdentity: React.FC<PlayerIdentityProps> = ({ onVerify }) => {
       });
       return;
     }
-    // In a real app, this would verify against a DB. 
-    // For now, we'll pass it up to save locally.
-    onVerify(selectedRole, pin);
+
+    setIsVerifying(true);
+    
+    try {
+      // 1. Check if role exists in DB
+      const { data, error } = await supabase
+        .from('player_identities')
+        .select('pin_hash')
+        .eq('role', selectedRole)
+        .maybeSingle();
+
+      if (error) {
+        throw error;
+      }
+
+      if (data) {
+        // Role exists, check PIN
+        if (data.pin_hash === pin) {
+          onVerify(selectedRole, pin);
+        } else {
+          toast({
+            title: "Access Denied",
+            description: "Incorrect PIN for this role.",
+            variant: "destructive",
+          });
+        }
+      } else {
+        // Role does not exist, insert new PIN
+        const { error: insertError } = await supabase
+          .from('player_identities')
+          .insert([{ role: selectedRole, pin_hash: pin }]);
+          
+        if (insertError) throw insertError;
+        
+        toast({
+          title: "Setup Complete",
+          description: `PIN successfully registered for ${selectedRole}.`,
+        });
+        onVerify(selectedRole, pin);
+      }
+    } catch (err) {
+      console.error(err);
+      toast({
+        title: "Connection Error",
+        description: "Could not connect to the secure server.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsVerifying(false);
+    }
   };
 
   return (

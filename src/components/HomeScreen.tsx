@@ -12,6 +12,7 @@ interface HomeScreenProps {
   isComplete: boolean;
   onStart: () => void;
   onReset: () => void;
+  onSignOut?: () => void;
   gameMode?: GameMode | null;
   playerRole?: PlayerRole | null;
   onOpenInbox?: () => void;
@@ -26,6 +27,7 @@ export default function HomeScreen({
   isComplete,
   onStart,
   onReset,
+  onSignOut,
   gameMode,
   playerRole,
   onOpenInbox
@@ -122,14 +124,19 @@ export default function HomeScreen({
       </div>
 
       {/* Sign Out / Reset Mode */}
-      <div className="mt-8 animate-fade-in" style={{ animationDelay: "300ms" }}>
+      <div className="mt-8 animate-fade-in flex flex-col items-center gap-1" style={{ animationDelay: "300ms" }}>
+        {gameMode && (
+          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
+            Playing as <span className="text-rose-500">{playerRole || "Guest"}</span>
+          </p>
+        )}
         <Button
-          onClick={onReset}
+          onClick={onSignOut}
           variant="link"
           size="sm"
           className="text-rose-400 hover:text-rose-500 text-xs gap-1"
         >
-          Sign out or Change Mode
+          Sign out / Switch Device
         </Button>
       </div>
     </div>
