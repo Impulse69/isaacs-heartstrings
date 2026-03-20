@@ -22,5 +22,14 @@ CREATE TABLE IF NOT EXISTS player_identities (
   last_active TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- 4. Table for Real-time Location Tracking
+CREATE TABLE IF NOT EXISTS player_locations (
+  player_role TEXT PRIMARY KEY CHECK (player_role IN ('isaac', 'ella')),
+  latitude DOUBLE PRECISION NOT NULL,
+  longitude DOUBLE PRECISION NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Note: In the Supabase SQL Editor, make sure to enable Realtime for these tables 
 -- by clicking 'Realtime' in the Table Editor settings for each table.
+-- ALSO: Enable Realtime specifically for 'player_locations' so Isaac can see her move.
