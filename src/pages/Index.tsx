@@ -4,10 +4,12 @@ import HomeScreen from "@/components/HomeScreen";
 import GameScreen from "@/components/GameScreen";
 import { GameModeSelection } from "@/components/GameModeSelection";
 import { PlayerIdentity } from "@/components/PlayerIdentity";
+import { InboxDashboard } from "@/components/InboxDashboard";
 
 export default function Index() {
   const game = useGameState();
   const [playing, setPlaying] = useState(false);
+  const [showInbox, setShowInbox] = useState(false);
 
   if (!game.loaded) {
     return (
@@ -27,6 +29,11 @@ export default function Index() {
     return <PlayerIdentity onVerify={game.verifyIdentity} />;
   }
 
+  // + Inbox View for Isaac
+  if (showInbox && game.gameMode === "apart" && game.playerRole === "isaac") {
+    return <InboxDashboard allQuestions={game.allQuestions} onClose={() => setShowInbox(false)} />;
+  }
+
   // 3. Normal Game Flow
   if (!playing) {
     return (
@@ -39,6 +46,9 @@ export default function Index() {
         isComplete={game.isComplete}
         onStart={() => setPlaying(true)}
         onReset={game.resetGame}
+        gameMode={game.gameMode}
+        playerRole={game.playerRole}
+        onOpenInbox={() => setShowInbox(true)}
       />
     );
   }

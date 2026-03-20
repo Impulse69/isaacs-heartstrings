@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 
+import { GameMode, PlayerRole } from "@/hooks/useGameState";
+
 interface HomeScreenProps {
   totalAnswered: number;
   totalQuestions: number;
@@ -10,6 +12,9 @@ interface HomeScreenProps {
   isComplete: boolean;
   onStart: () => void;
   onReset: () => void;
+  gameMode?: GameMode | null;
+  playerRole?: PlayerRole | null;
+  onOpenInbox?: () => void;
 }
 
 export default function HomeScreen({
@@ -21,6 +26,9 @@ export default function HomeScreen({
   isComplete,
   onStart,
   onReset,
+  gameMode,
+  playerRole,
+  onOpenInbox
 }: HomeScreenProps) {
   const progress = (totalAnswered / totalQuestions) * 100;
 
@@ -87,6 +95,18 @@ export default function HomeScreen({
             >
               {totalAnswered > 0 ? "Continue Playing 💕" : "Start Playing 💕"}
             </Button>
+            
+            {gameMode === "apart" && playerRole === "isaac" && onOpenInbox && (
+              <Button
+                onClick={onOpenInbox}
+                size="lg"
+                variant="outline"
+                className="w-full border-rose-300 text-rose-600 hover:bg-rose-50 active:scale-95 transition-transform text-base gap-2 shadow-sm"
+              >
+                💌 View Ella's Inbox
+              </Button>
+            )}
+
             {totalAnswered > 0 && (
               <Button
                 onClick={onReset}

@@ -151,5 +151,6 @@ export function useGameState() {
     loaded,
     gameMode,
     playerRole,
+    allQuestions,
   };
 }
