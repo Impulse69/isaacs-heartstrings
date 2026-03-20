@@ -45,16 +45,22 @@ export default function GameScreen({
   useEffect(() => {
     let animationFrameId: number;
     const updateTimer = () => {
-      setElapsed((Date.now() - startTime) / 1000);
-      animationFrameId = requestAnimationFrame(updateTimer);
+      // Only tick while in puzzle phase
+      if (phase === "puzzle") {
+        setElapsed((Date.now() - startTime) / 1000);
+        animationFrameId = requestAnimationFrame(updateTimer);
+      }
     };
-    if (gameMode === "apart") {
+    if (gameMode === "apart" && phase === "puzzle") {
       animationFrameId = requestAnimationFrame(updateTimer);
     }
     return () => cancelAnimationFrame(animationFrameId);
-  }, [startTime, gameMode]);
+  }, [startTime, gameMode, phase]);
 
   const handlePuzzleSolved = useCallback(() => {
+    // Record final exact time
+    setElapsed((Date.now() - startTime) / 1000);
+
     confetti({
       particleCount: 80,
       spread: 70,
@@ -62,17 +68,16 @@ export default function GameScreen({
       colors: ["#d6336c", "#9c36b5", "#f59f00", "#ff6b6b", "#ffd43b"],
     });
     setPhase("question");
-  }, []);
+  }, [startTime]);
 
   const handleNext = useCallback(async () => {
     // Save completion time to Supabase if in Distance mode
     if (gameMode === "apart" && playerRole) {
-      const timeElapsedSeconds = (Date.now() - startTime) / 1000;
       try {
         await supabase.from("game_records").insert([{
           player_role: playerRole,
           round_index: totalAnswered,
-          completion_time: timeElapsedSeconds
+          completion_time: elapsed
         }]);
       } catch (err) {
         console.error("Failed to save speed run record", err);
@@ -82,7 +87,7 @@ export default function GameScreen({
     onAnswered();
     setPhase("puzzle");
     setPuzzleKey((k) => k + 1);
-  }, [onAnswered, gameMode, playerRole, startTime, totalAnswered]);
+  }, [onAnswered, gameMode, playerRole, elapsed, totalAnswered]);
 
   if (isComplete || !currentQuestion) {
     return (
