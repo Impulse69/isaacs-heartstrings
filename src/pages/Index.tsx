@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useGameState } from "@/hooks/useGameState";
 import HomeScreen from "@/components/HomeScreen";
 import GameScreen from "@/components/GameScreen";
@@ -40,5 +41,3 @@ export default function Index() {
     />
   );
 }
-
-import { useState } from "react";
