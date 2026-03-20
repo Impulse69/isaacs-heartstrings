@@ -31,8 +31,8 @@ function createPuzzle(): PuzzlePiece[] {
 }
 
 // Unique romance images for puzzle rounds
-const PUZZLE_IMAGES = Array.from({ length: 100 }, (_, i) => 
-  `${import.meta.env.BASE_URL}images/puzzles/puzzle_${(i % 25) + 1}.png`
+const PUZZLE_IMAGES = Array.from({ length: 150 }, (_, i) => 
+  `${import.meta.env.BASE_URL}images/puzzles/puzzle_${(i % 30) + 1}.png`
 );
 
 const EMOJIS = ["💕", "🌹", "✨", "💖", "🦋", "🌸", "💫", "🔥", "💗", "🌺", "⭐", "💘"];
