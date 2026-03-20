@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface PuzzlePiece {
   id: number;
@@ -46,6 +47,7 @@ export default function PuzzleBoard({ onSolved, roundNumber }: PuzzleBoardProps)
   const [selectedPiece, setSelectedPiece] = useState<number | null>(null);
   const [solved, setSolved] = useState(false);
   const [moveCount, setMoveCount] = useState(0);
+  const [showReference, setShowReference] = useState(false);
 
   const currentImage = PUZZLE_IMAGES[roundNumber % PUZZLE_IMAGES.length];
   const emoji1 = EMOJIS[roundNumber % EMOJIS.length];
@@ -102,11 +104,19 @@ export default function PuzzleBoard({ onSolved, roundNumber }: PuzzleBoardProps)
         <span className="text-sm text-muted-foreground">Tap two pieces to swap</span>
         <div className="flex items-center gap-3">
           <span className="text-sm font-medium text-muted-foreground">{moveCount} moves</span>
-          <img 
-            src={currentImage} 
-            alt="Reference Image" 
-            className="w-10 h-10 rounded-md border shadow-sm opacity-90 object-cover pointer-events-none" 
-          />
+          <button 
+            onClick={() => setShowReference(true)}
+            className="group relative active:scale-95 transition-transform"
+          >
+            <img 
+              src={currentImage} 
+              alt="Reference Thumbnail" 
+              className="w-10 h-10 rounded-md border shadow-sm opacity-90 object-cover" 
+            />
+            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors rounded-md flex items-center justify-center">
+              <span className="text-[10px] text-white font-bold drop-shadow-md">🔍</span>
+            </div>
+          </button>
         </div>
       </div>
 
@@ -157,6 +167,41 @@ export default function PuzzleBoard({ onSolved, roundNumber }: PuzzleBoardProps)
           </div>
         )}
       </div>
+
+      <AnimatePresence>
+        {showReference && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowReference(false)}
+            className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-md"
+          >
+            <motion.div
+              initial={{ scale: 0.8, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.8, y: 20 }}
+              className="relative w-full max-w-sm"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img 
+                src={currentImage} 
+                alt="Full Reference" 
+                className="w-full h-auto rounded-2xl border-2 border-white/20 shadow-2xl" 
+              />
+              <button 
+                onClick={() => setShowReference(false)}
+                className="absolute -top-4 -right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center text-black font-bold shadow-lg active:scale-95 transition-transform"
+              >
+                ✕
+              </button>
+              <p className="text-white/80 text-center mt-4 font-medium text-sm">
+                This is what the completed puzzle looks like! ✨
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
