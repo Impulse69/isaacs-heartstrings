@@ -31,13 +31,28 @@ export default function GameScreen({
   const [phase, setPhase] = useState<"puzzle" | "question">("puzzle");
   const [puzzleKey, setPuzzleKey] = useState(0);
   const [startTime, setStartTime] = useState<number>(Date.now());
+  const [elapsed, setElapsed] = useState(0);
 
   // Reset timer on phase="puzzle"
   useEffect(() => {
     if (phase === "puzzle") {
       setStartTime(Date.now());
+      setElapsed(0);
     }
   }, [phase, puzzleKey]);
+
+  // Live ticking
+  useEffect(() => {
+    let animationFrameId: number;
+    const updateTimer = () => {
+      setElapsed((Date.now() - startTime) / 1000);
+      animationFrameId = requestAnimationFrame(updateTimer);
+    };
+    if (gameMode === "apart") {
+      animationFrameId = requestAnimationFrame(updateTimer);
+    }
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [startTime, gameMode]);
 
   const handlePuzzleSolved = useCallback(() => {
     confetti({
@@ -93,9 +108,18 @@ export default function GameScreen({
         <div className="flex-1">
           <Progress value={progress} className="h-2" />
         </div>
-        <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">
-          {totalAnswered}/{totalQuestions}
-        </span>
+        
+        {gameMode === "apart" && (
+          <span className="text-xs font-mono font-bold text-amber-600 bg-amber-100 px-2 py-0.5 rounded border border-amber-200 shadow-sm whitespace-nowrap">
+            ⏱ {elapsed.toFixed(1)}s
+          </span>
+        )}
+
+        {playerRole !== "ella" && (
+          <span className="text-xs font-medium text-muted-foreground whitespace-nowrap hidden sm:inline-block">
+            {totalAnswered}/{totalQuestions}
+          </span>
+        )}
       </div>
 
       {/* Main content */}

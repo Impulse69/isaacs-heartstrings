@@ -176,12 +176,12 @@ export default function QuestionCard({ question, onNext, gameMode, playerRole }:
       {!(isAsymmetrical && playerRole === "ella") && (
         <Button
           onClick={onNext}
-          disabled={isAsymmetrical && playerRole === "isaac" && !fetchedAnswer} // Isaac must wait
+          disabled={false} // removed Isaac must wait block
           className="w-full mt-4 bg-primary hover:bg-primary/90 text-primary-foreground active:scale-95 transition-transform"
           size="lg"
         >
           {isAsymmetrical && playerRole === "isaac" && !fetchedAnswer 
-            ? "Waiting for Ella..." 
+            ? "Skip (Ella hasn't answered yet) →" 
             : "Next Puzzle →"}
         </Button>
       )}
