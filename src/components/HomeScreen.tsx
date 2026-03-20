@@ -17,7 +17,6 @@ interface HomeScreenProps {
   playerRole?: PlayerRole | null;
   onOpenInbox?: () => void;
   onOpenLeaderboard?: () => void;
-  onOpenMap?: () => void;
 }
 
 export default function HomeScreen({
@@ -33,8 +32,7 @@ export default function HomeScreen({
   gameMode,
   playerRole,
   onOpenInbox,
-  onOpenLeaderboard,
-  onOpenMap
+  onOpenLeaderboard
 }: HomeScreenProps) {
   const progress = (totalAnswered / totalQuestions) * 100;
 
@@ -140,17 +138,6 @@ export default function HomeScreen({
                 className="w-full border-rose-300 text-rose-600 hover:bg-rose-50 active:scale-95 transition-transform text-base gap-2 shadow-sm"
               >
                 💌 View Ella's Inbox
-              </Button>
-            )}
-
-            {gameMode === "apart" && onOpenMap && (
-              <Button
-                onClick={onOpenMap}
-                size="lg"
-                variant="outline"
-                className="w-full border-blue-300 text-blue-600 hover:bg-blue-50 active:scale-95 transition-transform text-base gap-2 shadow-sm"
-              >
-                📍 {playerRole === "ella" ? "Share My Location" : "Where is She?"}
               </Button>
             )}
 
