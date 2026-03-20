@@ -29,15 +29,10 @@ function createPuzzle(): PuzzlePiece[] {
   return pieces.map((p, i) => ({ ...p, currentPos: positions[i] }));
 }
 
-// CSS gradient patterns for puzzle images
-const PATTERNS = [
-  "linear-gradient(135deg, hsl(340 70% 65%) 0%, hsl(300 50% 70%) 50%, hsl(42 80% 65%) 100%)",
-  "radial-gradient(circle at 30% 40%, hsl(340 65% 60%) 0%, hsl(280 45% 55%) 60%, hsl(320 60% 45%) 100%)",
-  "linear-gradient(45deg, hsl(42 85% 60%) 0%, hsl(340 60% 55%) 50%, hsl(280 50% 60%) 100%)",
-  "conic-gradient(from 45deg, hsl(340 65% 55%), hsl(42 80% 65%), hsl(280 50% 60%), hsl(340 65% 55%))",
-  "linear-gradient(160deg, hsl(280 50% 65%) 0%, hsl(340 70% 60%) 40%, hsl(42 75% 60%) 100%)",
-  "radial-gradient(ellipse at 70% 30%, hsl(42 80% 70%) 0%, hsl(340 60% 55%) 50%, hsl(280 40% 50%) 100%)",
-];
+// Unique romance images for puzzle rounds
+const PUZZLE_IMAGES = Array.from({ length: 50 }, (_, i) => 
+  `/images/puzzles/puzzle_${(i % 17) + 1}.png`
+);
 
 const EMOJIS = ["💕", "🌹", "✨", "💖", "🦋", "🌸", "💫", "🔥", "💗", "🌺", "⭐", "💘"];
 
@@ -52,9 +47,10 @@ export default function PuzzleBoard({ onSolved, roundNumber }: PuzzleBoardProps)
   const [solved, setSolved] = useState(false);
   const [moveCount, setMoveCount] = useState(0);
 
-  const pattern = PATTERNS[roundNumber % PATTERNS.length];
+  const currentImage = PUZZLE_IMAGES[roundNumber % PUZZLE_IMAGES.length];
   const emoji1 = EMOJIS[roundNumber % EMOJIS.length];
   const emoji2 = EMOJIS[(roundNumber + 4) % EMOJIS.length];
+
 
   // Check if solved
   useEffect(() => {
@@ -132,25 +128,12 @@ export default function PuzzleBoard({ onSolved, roundNumber }: PuzzleBoardProps)
                   ${solved ? "ring-2 ring-accent" : ""}
                 `}
                 style={{
-                  background: pattern,
+                  backgroundImage: `url(${currentImage})`,
                   backgroundSize: "300% 300%",
                   backgroundPosition: `${col * 50}% ${row * 50}%`,
                 }}
                 aria-label={`Puzzle piece ${piece.id + 1}`}
               >
-                {/* Emoji overlay */}
-                <span
-                  className="absolute inset-0 flex items-center justify-center text-2xl sm:text-3xl opacity-80 pointer-events-none"
-                  style={{ textShadow: "0 1px 3px rgba(0,0,0,0.2)" }}
-                >
-                  {piece.correctPos % 2 === 0 ? emoji1 : emoji2}
-                </span>
-
-                {/* Piece number */}
-                <span className="absolute bottom-1 right-1 text-[10px] font-bold text-white/60 pointer-events-none">
-                  {piece.correctPos + 1}
-                </span>
-
                 {/* Correct indicator */}
                 {isCorrect && !solved && (
                   <span className="absolute top-1 left-1 w-2 h-2 rounded-full bg-accent" />
