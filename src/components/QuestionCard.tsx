@@ -146,10 +146,10 @@ export default function QuestionCard({ question, onNext, gameMode, playerRole }:
           <Button 
             onClick={submitEllaAnswer}
             disabled={!ellaText.trim() || isSubmitting}
-            className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 shadow-lg text-white font-bold"
+            className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 shadow-lg text-white font-bold transition-all"
             size="lg"
           >
-            {isSubmitting ? "Sending to Isaac..." : "Send to Isaac! 💕"}
+            {isSubmitting ? "Saving Answer..." : "Save Answer ✨"}
           </Button>
         </div>
       )}
