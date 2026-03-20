@@ -52,26 +52,45 @@ export default function HomeScreen({
       {/* Progress section */}
       {totalAnswered > 0 && (
         <div className="w-full max-w-xs mb-8 space-y-3 animate-fade-in" style={{ animationDelay: "100ms" }}>
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Progress</span>
-            <span className="font-semibold text-foreground">{totalAnswered}/{totalQuestions}</span>
-          </div>
+          {playerRole !== "ella" && (
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Progress</span>
+              <span className="font-semibold text-foreground">{totalAnswered}/{totalQuestions}</span>
+            </div>
+          )}
           <Progress value={progress} className="h-3" />
 
-          <div className="grid grid-cols-3 gap-2 text-center text-xs">
-            <div className="rounded-lg bg-primary/5 border border-primary/20 p-2">
-              <p className="font-bold text-foreground">{isaacAnswered}/180</p>
-              <p className="text-muted-foreground">💕 Isaac</p>
+          {playerRole === "ella" ? (
+            <div className="grid grid-cols-3 gap-2 text-center text-xs">
+              <div className="rounded-lg bg-primary/5 border border-primary/20 p-2 flex flex-col items-center justify-center">
+                <span className="text-lg block">💕</span>
+                <p className="text-primary font-medium mt-1">About Him</p>
+              </div>
+              <div className="rounded-lg bg-secondary/50 border border-secondary p-2 flex flex-col items-center justify-center">
+                <span className="text-lg block">💜</span>
+                <p className="text-secondary-foreground font-medium mt-1">About Me</p>
+              </div>
+              <div className="rounded-lg bg-accent/10 border border-accent/30 p-2 flex flex-col items-center justify-center">
+                <span className="text-lg block">📖</span>
+                <p className="text-accent-foreground font-medium mt-1">Our Faith</p>
+              </div>
             </div>
-            <div className="rounded-lg bg-secondary/50 border border-secondary p-2">
-              <p className="font-bold text-foreground">{ellaAnswered}/30</p>
-              <p className="text-muted-foreground">💜 Ella</p>
+          ) : (
+            <div className="grid grid-cols-3 gap-2 text-center text-xs">
+              <div className="rounded-lg bg-primary/5 border border-primary/20 p-2">
+                <p className="font-bold text-foreground">{isaacAnswered}/180</p>
+                <p className="text-muted-foreground">💕 Isaac</p>
+              </div>
+              <div className="rounded-lg bg-secondary/50 border border-secondary p-2">
+                <p className="font-bold text-foreground">{ellaAnswered}/30</p>
+                <p className="text-muted-foreground">💜 Ella</p>
+              </div>
+              <div className="rounded-lg bg-accent/10 border border-accent/30 p-2">
+                <p className="font-bold text-foreground">{bibleAnswered}/90</p>
+                <p className="text-muted-foreground">📖 Bible</p>
+              </div>
             </div>
-            <div className="rounded-lg bg-accent/10 border border-accent/30 p-2">
-              <p className="font-bold text-foreground">{bibleAnswered}/90</p>
-              <p className="text-muted-foreground">📖 Bible</p>
-            </div>
-          </div>
+          )}
         </div>
       )}
 
