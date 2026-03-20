@@ -16,6 +16,7 @@ interface HomeScreenProps {
   gameMode?: GameMode | null;
   playerRole?: PlayerRole | null;
   onOpenInbox?: () => void;
+  onOpenLeaderboard?: () => void;
 }
 
 export default function HomeScreen({
@@ -30,7 +31,8 @@ export default function HomeScreen({
   onSignOut,
   gameMode,
   playerRole,
-  onOpenInbox
+  onOpenInbox,
+  onOpenLeaderboard
 }: HomeScreenProps) {
   const progress = (totalAnswered / totalQuestions) * 100;
 
@@ -117,6 +119,17 @@ export default function HomeScreen({
               {totalAnswered > 0 ? "Continue Playing 💕" : "Start Playing 💕"}
             </Button>
             
+            {gameMode === "apart" && onOpenLeaderboard && (
+              <Button
+                onClick={onOpenLeaderboard}
+                size="lg"
+                variant="outline"
+                className="w-full border-amber-300 text-amber-600 hover:bg-amber-50 active:scale-95 transition-transform text-base gap-2 shadow-sm"
+              >
+                🏆 View Leaderboard
+              </Button>
+            )}
+
             {gameMode === "apart" && playerRole === "isaac" && onOpenInbox && (
               <Button
                 onClick={onOpenInbox}

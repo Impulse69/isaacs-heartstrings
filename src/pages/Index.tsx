@@ -5,11 +5,13 @@ import GameScreen from "@/components/GameScreen";
 import { GameModeSelection } from "@/components/GameModeSelection";
 import { PlayerIdentity } from "@/components/PlayerIdentity";
 import { InboxDashboard } from "@/components/InboxDashboard";
+import { Leaderboard } from "@/components/Leaderboard";
 
 export default function Index() {
   const game = useGameState();
   const [playing, setPlaying] = useState(false);
   const [showInbox, setShowInbox] = useState(false);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
 
   if (!game.loaded) {
     return (
@@ -34,6 +36,11 @@ export default function Index() {
     return <InboxDashboard allQuestions={game.allQuestions} onClose={() => setShowInbox(false)} />;
   }
 
+  // + Leaderboard View
+  if (showLeaderboard && game.gameMode === "apart") {
+    return <Leaderboard onClose={() => setShowLeaderboard(false)} />;
+  }
+
   // 3. Normal Game Flow
   if (!playing) {
     return (
@@ -50,6 +57,7 @@ export default function Index() {
         gameMode={game.gameMode}
         playerRole={game.playerRole}
         onOpenInbox={() => setShowInbox(true)}
+        onOpenLeaderboard={() => setShowLeaderboard(true)}
       />
     );
   }
