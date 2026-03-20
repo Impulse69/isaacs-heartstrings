@@ -4,6 +4,8 @@ import { ellaQuestions } from "@/data/ellaQuestions";
 import { bibleQuestions, BibleQuestion } from "@/data/bibleQuestions";
 
 export type QuestionType = "isaac" | "ella" | "bible";
+export type GameMode = "together" | "apart";
+export type PlayerRole = "isaac" | "ella";
 
 export interface GameQuestion {
   id: number;
@@ -45,6 +47,9 @@ function shuffle<T>(arr: T[]): T[] {
 interface SavedState {
   answeredIds: number[];
   order: number[];
+  gameMode: GameMode | null;
+  playerRole: PlayerRole | null;
+  pin: string | null;
 }
 
 export function useGameState() {
@@ -53,6 +58,9 @@ export function useGameState() {
   const [answeredIds, setAnsweredIds] = useState<number[]>([]);
   const [order, setOrder] = useState<number[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [gameMode, setGameMode] = useState<GameMode | null>(null);
+  const [playerRole, setPlayerRole] = useState<PlayerRole | null>(null);
+  const [pin, setPin] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
 
   // Load from localStorage
@@ -64,6 +72,9 @@ export function useGameState() {
         setAnsweredIds(saved.answeredIds || []);
         setOrder(saved.order && saved.order.length === allQuestions.length ? saved.order : shuffle(allQuestions.map((_, i) => i)));
         setCurrentIndex(saved.answeredIds?.length || 0);
+        setGameMode(saved.gameMode || null);
+        setPlayerRole(saved.playerRole || null);
+        setPin(saved.pin || null);
       } else {
         const newOrder = shuffle(allQuestions.map((_, i) => i));
         setOrder(newOrder);
@@ -78,8 +89,14 @@ export function useGameState() {
   // Save to localStorage
   useEffect(() => {
     if (!loaded) return;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ answeredIds, order }));
-  }, [answeredIds, order, loaded]);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ 
+      answeredIds, 
+      order, 
+      gameMode, 
+      playerRole, 
+      pin 
+    }));
+  }, [answeredIds, order, loaded, gameMode, playerRole, pin]);
 
   const currentQuestion: GameQuestion | null =
     order.length > 0 && currentIndex < order.length
@@ -97,7 +114,19 @@ export function useGameState() {
     setOrder(newOrder);
     setAnsweredIds([]);
     setCurrentIndex(0);
+    setGameMode(null);
+    setPlayerRole(null);
+    setPin(null);
     localStorage.removeItem(STORAGE_KEY);
+  }, []);
+
+  const selectMode = useCallback((mode: GameMode) => {
+    setGameMode(mode);
+  }, []);
+
+  const verifyIdentity = useCallback((role: PlayerRole, passcode: string) => {
+    setPlayerRole(role);
+    setPin(passcode);
   }, []);
 
   const totalAnswered = answeredIds.length;
@@ -111,6 +140,8 @@ export function useGameState() {
     currentQuestion,
     markAnswered,
     resetGame,
+    selectMode,
+    verifyIdentity,
     totalAnswered,
     isaacAnswered,
     ellaAnswered,
@@ -118,5 +149,7 @@ export function useGameState() {
     totalQuestions: allQuestions.length,
     isComplete,
     loaded,
+    gameMode,
+    playerRole,
   };
 }

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useGameState } from "@/hooks/useGameState";
 import HomeScreen from "@/components/HomeScreen";
 import GameScreen from "@/components/GameScreen";
+import { GameModeSelection } from "@/components/GameModeSelection";
+import { PlayerIdentity } from "@/components/PlayerIdentity";
 
 export default function Index() {
   const game = useGameState();
@@ -15,6 +17,17 @@ export default function Index() {
     );
   }
 
+  // 1. Choose Together vs Apart
+  if (!game.gameMode) {
+    return <GameModeSelection onSelect={game.selectMode} />;
+  }
+
+  // 2. If Apart, verify identity
+  if (game.gameMode === "apart" && !game.playerRole) {
+    return <PlayerIdentity onVerify={game.verifyIdentity} />;
+  }
+
+  // 3. Normal Game Flow
   if (!playing) {
     return (
       <HomeScreen

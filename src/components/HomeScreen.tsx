@@ -100,6 +100,18 @@ export default function HomeScreen({
           </>
         )}
       </div>
+
+      {/* Sign Out / Reset Mode */}
+      <div className="mt-8 animate-fade-in" style={{ animationDelay: "300ms" }}>
+        <Button
+          onClick={onReset}
+          variant="link"
+          size="sm"
+          className="text-rose-400 hover:text-rose-500 text-xs gap-1"
+        >
+          Sign out or Change Mode
+        </Button>
+      </div>
     </div>
   );
 }
