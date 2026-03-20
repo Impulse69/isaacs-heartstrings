@@ -51,6 +51,8 @@ export default function Index() {
       onAnswered={game.markAnswered}
       onHome={() => setPlaying(false)}
       isComplete={game.isComplete}
+      gameMode={game.gameMode}
+      playerRole={game.playerRole}
     />
   );
 }

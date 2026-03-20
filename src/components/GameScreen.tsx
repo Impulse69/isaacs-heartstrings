@@ -1,10 +1,11 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import confetti from "canvas-confetti";
-import { GameQuestion } from "@/hooks/useGameState";
+import { GameQuestion, GameMode, PlayerRole } from "@/hooks/useGameState";
 import PuzzleBoard from "@/components/PuzzleBoard";
 import QuestionCard from "@/components/QuestionCard";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { supabase } from "@/integrations/supabase/client";
 
 interface GameScreenProps {
   currentQuestion: GameQuestion | null;
@@ -13,6 +14,8 @@ interface GameScreenProps {
   onAnswered: () => void;
   onHome: () => void;
   isComplete: boolean;
+  gameMode: GameMode | null;
+  playerRole: PlayerRole | null;
 }
 
 export default function GameScreen({
@@ -22,12 +25,21 @@ export default function GameScreen({
   onAnswered,
   onHome,
   isComplete,
+  gameMode,
+  playerRole
 }: GameScreenProps) {
   const [phase, setPhase] = useState<"puzzle" | "question">("puzzle");
   const [puzzleKey, setPuzzleKey] = useState(0);
+  const [startTime, setStartTime] = useState<number>(Date.now());
+
+  // Reset timer on phase="puzzle"
+  useEffect(() => {
+    if (phase === "puzzle") {
+      setStartTime(Date.now());
+    }
+  }, [phase, puzzleKey]);
 
   const handlePuzzleSolved = useCallback(() => {
-    // Fire confetti
     confetti({
       particleCount: 80,
       spread: 70,
@@ -37,11 +49,25 @@ export default function GameScreen({
     setPhase("question");
   }, []);
 
-  const handleNext = useCallback(() => {
+  const handleNext = useCallback(async () => {
+    // Save completion time to Supabase if in Distance mode
+    if (gameMode === "apart" && playerRole) {
+      const timeElapsedSeconds = (Date.now() - startTime) / 1000;
+      try {
+        await supabase.from("game_records").insert([{
+          player_role: playerRole,
+          round_index: totalAnswered,
+          completion_time: timeElapsedSeconds
+        }]);
+      } catch (err) {
+        console.error("Failed to save speed run record", err);
+      }
+    }
+
     onAnswered();
     setPhase("puzzle");
     setPuzzleKey((k) => k + 1);
-  }, [onAnswered]);
+  }, [onAnswered, gameMode, playerRole, startTime, totalAnswered]);
 
   if (isComplete || !currentQuestion) {
     return (
@@ -86,7 +112,12 @@ export default function GameScreen({
             />
           </>
         ) : (
-          <QuestionCard question={currentQuestion} onNext={handleNext} />
+          <QuestionCard 
+            question={currentQuestion} 
+            onNext={handleNext} 
+            gameMode={gameMode}
+            playerRole={playerRole}
+          />
         )}
       </div>
     </div>
