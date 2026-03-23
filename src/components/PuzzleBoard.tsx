@@ -9,14 +9,14 @@ interface PuzzlePiece {
 
 // Generate a shuffled puzzle that's always solvable
 function createPuzzle(): PuzzlePiece[] {
-  const pieces: PuzzlePiece[] = Array.from({ length: 9 }, (_, i) => ({
+  const pieces: PuzzlePiece[] = Array.from({ length: 16 }, (_, i) => ({
     id: i,
     currentPos: i,
     correctPos: i,
   }));
 
   // Fisher-Yates shuffle positions
-  const positions = Array.from({ length: 9 }, (_, i) => i);
+  const positions = Array.from({ length: 16 }, (_, i) => i);
   for (let i = positions.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [positions[i], positions[j]] = [positions[j], positions[i]];
@@ -92,7 +92,7 @@ export default function PuzzleBoard({ onSolved, roundNumber }: PuzzleBoardProps)
 
   // Build grid: position -> piece
   const grid = useMemo(() => {
-    const g: (PuzzlePiece | undefined)[] = Array(9).fill(undefined);
+    const g: (PuzzlePiece | undefined)[] = Array(16).fill(undefined);
     pieces.forEach((p) => {
       g[p.currentPos] = p;
     });
@@ -123,7 +123,7 @@ export default function PuzzleBoard({ onSolved, roundNumber }: PuzzleBoardProps)
 
       <div className="relative">
         {/* Puzzle grid */}
-        <div className="grid grid-cols-3 gap-1 w-[288px] h-[288px] sm:w-[324px] sm:h-[324px] rounded-xl overflow-hidden p-1 bg-border/50">
+        <div className="grid grid-cols-4 gap-1 w-[288px] h-[288px] sm:w-[324px] sm:h-[324px] rounded-xl overflow-hidden p-1 bg-border/50">
           {grid.map((piece, posIndex) => {
             if (!piece) return <div key={posIndex} />;
 
@@ -131,8 +131,8 @@ export default function PuzzleBoard({ onSolved, roundNumber }: PuzzleBoardProps)
             const isSelected = selectedPiece === posIndex;
 
             // Calculate the background position for this piece's correct image slice
-            const row = Math.floor(piece.correctPos / 3);
-            const col = piece.correctPos % 3;
+            const row = Math.floor(piece.correctPos / 4);
+            const col = piece.correctPos % 4;
 
             return (
               <button
@@ -147,8 +147,8 @@ export default function PuzzleBoard({ onSolved, roundNumber }: PuzzleBoardProps)
                 `}
                 style={{
                   backgroundImage: `url(${currentImage})`,
-                  backgroundSize: "300% 300%",
-                  backgroundPosition: `${col * 50}% ${row * 50}%`,
+                  backgroundSize: "400% 400%",
+                  backgroundPosition: `${col * 33.33333}% ${row * 33.33333}%`,
                 }}
                 aria-label={`Puzzle piece ${piece.id + 1}`}
               >
