@@ -70,7 +70,7 @@ export const GlobalChatBubble = () => {
       <div className="fixed bottom-4 left-4 z-[60]">
         <Button
           size="icon"
-          onClick={() => setIsOpen(true)}
+          onClick={() => setIsOpen(!isOpen)}
           className="h-14 w-14 rounded-full bg-rose-500 hover:bg-rose-600 shadow-xl border-4 border-white transition-transform hover:scale-105"
         >
           <MessageCircle className="h-6 w-6 text-white" />
@@ -84,7 +84,12 @@ export const GlobalChatBubble = () => {
 
       <AnimatePresence>
         {isOpen && (
-          <motion.div
+          <>
+            <div 
+              className="fixed inset-0 z-[55]" 
+              onClick={() => setIsOpen(false)} 
+            />
+            <motion.div
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
@@ -124,6 +129,7 @@ export const GlobalChatBubble = () => {
               )}
             </ScrollArea>
           </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>
