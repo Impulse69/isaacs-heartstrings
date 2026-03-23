@@ -3,6 +3,7 @@ import confetti from "canvas-confetti";
 import { GameQuestion, GameMode, PlayerRole } from "@/hooks/useGameState";
 import PuzzleBoard from "@/components/PuzzleBoard";
 import QuestionCard from "@/components/QuestionCard";
+import { PartnerStatusWidget } from "@/components/PartnerStatusWidget";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
@@ -114,6 +115,8 @@ export default function GameScreen({
           <Progress value={progress} className="h-2" />
         </div>
         
+        <PartnerStatusWidget playerRole={playerRole} gameMode={gameMode} className="inline-flex items-center shrink-0 hidden sm:flex" />
+
         {gameMode === "apart" && (
           <span className="text-xs font-mono font-bold text-amber-600 bg-amber-100 px-2 py-0.5 rounded border border-amber-200 shadow-sm whitespace-nowrap">
             ⏱ {elapsed.toFixed(1)}s

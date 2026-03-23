@@ -5,9 +5,10 @@ import { formatDistanceToNow } from "date-fns";
 interface PartnerStatusWidgetProps {
   playerRole: PlayerRole | null;
   gameMode: GameMode | null;
+  className?: string;
 }
 
-export function PartnerStatusWidget({ playerRole, gameMode }: PartnerStatusWidgetProps) {
+export function PartnerStatusWidget({ playerRole, gameMode, className = "fixed top-4 left-1/2 -translate-x-1/2 z-[60]" }: PartnerStatusWidgetProps) {
   const { isPartnerOnline, partnerLastSeen } = usePlayerPresence(playerRole);
 
   if (gameMode !== "apart" || !playerRole) return null;
@@ -15,7 +16,7 @@ export function PartnerStatusWidget({ playerRole, gameMode }: PartnerStatusWidge
   const partnerName = playerRole === "isaac" ? "Ella" : "Isaac";
 
   return (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[60] pointer-events-none">
+    <div className={`pointer-events-none ${className}`}>
       <div className="bg-background/90 backdrop-blur-md border shadow-md rounded-full px-4 py-1.5 flex items-center justify-center gap-2.5 transition-all">
         <span className="relative flex h-2.5 w-2.5">
           {isPartnerOnline && (
