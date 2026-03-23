@@ -58,7 +58,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onClose }) => {
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-background">
-      <div className="flex items-center justify-between px-6 py-4 border-b bg-white/50 backdrop-blur-sm sticky top-0 z-10 shadow-sm">
+      <div className="flex items-center justify-between px-6 py-4 border-b bg-background/80 backdrop-blur-sm sticky top-0 z-10 shadow-sm">
         <h2 className="text-xl font-bold text-amber-500 flex items-center gap-2">
           <span>🏆</span> Speed Run Records
         </h2>
@@ -90,9 +90,9 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onClose }) => {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: idx * 0.05 }}
-                    className="bg-white p-4 rounded-xl border shadow-sm flex flex-col gap-3"
+                    className="bg-card text-card-foreground p-4 rounded-xl border shadow-sm flex flex-col gap-3"
                   >
-                    <div className="flex justify-between items-center bg-gray-50 -mx-4 -mt-4 p-3 rounded-t-xl border-b mb-1">
+                    <div className="flex justify-between items-center bg-muted/50 -mx-4 -mt-4 p-3 rounded-t-xl border-b mb-1">
                       <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
                         Round {round + 1}
                       </span>
@@ -103,8 +103,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onClose }) => {
                       {/* Isaac Card */}
                       <div className={`p-3 rounded-lg border flex flex-col items-center justify-center transition-all ${
                         isaacTime !== undefined && (ellaTime === undefined || isaacTime < ellaTime) 
-                        ? "bg-rose-50 border-rose-200 ring-2 ring-rose-300 ring-offset-2" 
-                        : "bg-gray-50 border-gray-100 opacity-80"
+                        ? "bg-rose-50 dark:bg-rose-950/30 border-rose-200 dark:border-rose-900 ring-2 ring-rose-300 dark:ring-rose-800 ring-offset-2 dark:ring-offset-background" 
+                        : "bg-muted/30 border-muted opacity-80"
                       }`}>
                         <div className="text-sm font-semibold text-rose-500 mb-1">Isaac</div>
                         {isaacTime ? (
@@ -117,8 +117,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onClose }) => {
                       {/* Ella Card */}
                       <div className={`p-3 rounded-lg border flex flex-col items-center justify-center transition-all ${
                         ellaTime !== undefined && (isaacTime === undefined || ellaTime < isaacTime) 
-                        ? "bg-pink-50 border-pink-200 ring-2 ring-pink-300 ring-offset-2" 
-                        : "bg-gray-50 border-gray-100 opacity-80"
+                        ? "bg-pink-50 dark:bg-pink-950/30 border-pink-200 dark:border-pink-900 ring-2 ring-pink-300 dark:ring-pink-800 ring-offset-2 dark:ring-offset-background" 
+                        : "bg-muted/30 border-muted opacity-80"
                       }`}>
                         <div className="text-sm font-semibold text-pink-500 mb-1">Ella</div>
                         {ellaTime ? (
