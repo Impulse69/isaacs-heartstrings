@@ -3,6 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import { GlobalChatBubble } from "@/components/GlobalChatBubble";
 
 import { GameMode, PlayerRole } from "@/hooks/useGameState";
+import { PartnerStatusWidget } from "@/components/PartnerStatusWidget";
 
 interface HomeScreenProps {
   totalAnswered: number;
@@ -38,7 +39,9 @@ export default function HomeScreen({
   const progress = (totalAnswered / totalQuestions) * 100;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[100dvh] px-6 py-12 bg-background">
+    <div className="flex flex-col items-center justify-center min-h-[100dvh] px-4 py-8 bg-background relative overflow-hidden">
+      <PartnerStatusWidget playerRole={playerRole} gameMode={gameMode} />
+      
       {/* Title area */}
       <div className="flex flex-col items-center gap-3 mb-10 animate-fade-in">
         <span className="text-5xl">🧩</span>
