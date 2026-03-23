@@ -22,5 +22,14 @@ CREATE TABLE IF NOT EXISTS player_identities (
   last_active TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- 4. Table for Ella asking custom questions
+CREATE TABLE IF NOT EXISTS ella_asks (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  question_text TEXT NOT NULL,
+  answer_text TEXT,
+  is_read BOOLEAN DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Note: In the Supabase SQL Editor, make sure to enable Realtime for these tables 
 -- by clicking 'Realtime' in the Table Editor settings for each table.

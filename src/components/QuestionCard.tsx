@@ -30,6 +30,12 @@ const TYPE_CONFIG: Record<QuestionType, { label: string; emoji: string; bgClass:
     bgClass: "bg-accent/10",
     borderClass: "border-accent/30",
   },
+  ella_asks: {
+    label: "Your Turn to Ask!",
+    emoji: "💬",
+    bgClass: "bg-rose-50",
+    borderClass: "border-rose-300",
+  },
 };
 
 export default function QuestionCard({ question, onNext, gameMode, playerRole }: QuestionCardProps) {
@@ -56,6 +62,22 @@ export default function QuestionCard({ question, onNext, gameMode, playerRole }:
     } catch (err) {
       console.error("Failed to submit answer", err);
       setIsSubmitting(false); // allow retry
+    }
+  };
+
+  const submitEllaAsk = async () => {
+    if (!ellaText.trim() || isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      await supabase.from("ella_asks").insert([{
+        question_text: ellaText
+      }]);
+      setEllaText("");
+      setIsSubmitting(false);
+      onNext();
+    } catch (err) {
+      console.error("Failed to submit custom question", err);
+      setIsSubmitting(false);
     }
   };
 
@@ -172,8 +194,28 @@ export default function QuestionCard({ question, onNext, gameMode, playerRole }:
         </div>
       )}
 
-      {/* Standard Next button (hidden for Ella during asymmetrical questions because she must submit via the pink button above) */}
-      {!(isAsymmetrical && playerRole === "ella") && (
+      {/* Ella asking custom questions (Works in both modes) */}
+      {question.type === "ella_asks" && (
+        <div className="w-full space-y-4 animate-fade-in mt-4 border-t border-rose-200 pt-4">
+          <Textarea 
+            placeholder="What do you want to ask Isaac?..."
+            className="min-h-[120px] resize-none bg-white p-4 rounded-xl border-rose-300 focus:ring-rose-400 focus:border-rose-400 shadow-inner"
+            value={ellaText}
+            onChange={(e) => setEllaText(e.target.value)}
+          />
+          <Button 
+            onClick={submitEllaAsk}
+            disabled={!ellaText.trim() || isSubmitting}
+            className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 shadow-lg text-white font-bold transition-all"
+            size="lg"
+          >
+            {isSubmitting ? "Sending..." : "Send to Isaac 💌"}
+          </Button>
+        </div>
+      )}
+
+      {/* Standard Next button (hidden for Ella during asymmetrical questions and her custom asks because she must submit via the pink button above) */}
+      {!(isAsymmetrical && playerRole === "ella") && question.type !== "ella_asks" && (
         <Button
           onClick={onNext}
           disabled={false} // removed Isaac must wait block

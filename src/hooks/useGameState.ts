@@ -3,7 +3,7 @@ import { isaacQuestions } from "@/data/isaacQuestions";
 import { ellaQuestions } from "@/data/ellaQuestions";
 import { bibleQuestions, BibleQuestion } from "@/data/bibleQuestions";
 
-export type QuestionType = "isaac" | "ella" | "bible";
+export type QuestionType = "isaac" | "ella" | "bible" | "ella_asks";
 export type GameMode = "together" | "apart";
 export type PlayerRole = "isaac" | "ella";
 
@@ -98,9 +98,14 @@ export function useGameState() {
     }));
   }, [answeredIds, order, loaded, gameMode, playerRole, pin]);
 
+  const listQuestionIndex = Math.floor(currentIndex / 2);
+  const isEllaAsks = currentIndex % 2 === 0;
+
   const currentQuestion: GameQuestion | null =
-    order.length > 0 && currentIndex < order.length
-      ? allQuestions[order[currentIndex]]
+    order.length > 0 && listQuestionIndex < order.length
+      ? isEllaAsks
+        ? { id: -currentIndex - 1, type: "ella_asks", text: "Your turn! Ask Isaac any question you want. (He has to answer truthfully without brushing it off!)" }
+        : allQuestions[order[listQuestionIndex]]
       : null;
 
   const markAnswered = useCallback(() => {
@@ -134,11 +139,14 @@ export function useGameState() {
   }, []);
 
   const totalAnswered = answeredIds.length;
-  const isaacAnswered = answeredIds.filter((id) => allQuestions[id]?.type === "isaac").length;
-  const ellaAnswered = answeredIds.filter((id) => allQuestions[id]?.type === "ella").length;
-  const bibleAnswered = answeredIds.filter((id) => allQuestions[id]?.type === "bible").length;
+  // We don't filter answeredIds for isaac/ella/bible anymore because the ids mixed with negatives
+  // The original filtered length against allQuestions[id]. We must filter out negatives.
+  const isaacAnswered = answeredIds.filter((id) => id >= 0 && allQuestions[id]?.type === "isaac").length;
+  const ellaAnswered = answeredIds.filter((id) => id >= 0 && allQuestions[id]?.type === "ella").length;
+  const bibleAnswered = answeredIds.filter((id) => id >= 0 && allQuestions[id]?.type === "bible").length;
 
-  const isComplete = totalAnswered >= allQuestions.length;
+  const totalQuestions = allQuestions.length * 2;
+  const isComplete = totalAnswered >= totalQuestions;
 
   return {
     currentQuestion,
@@ -151,7 +159,7 @@ export function useGameState() {
     isaacAnswered,
     ellaAnswered,
     bibleAnswered,
-    totalQuestions: allQuestions.length,
+    totalQuestions,
     isComplete,
     loaded,
     gameMode,
