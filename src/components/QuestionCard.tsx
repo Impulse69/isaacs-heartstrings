@@ -203,14 +203,24 @@ export default function QuestionCard({ question, onNext, gameMode, playerRole }:
             value={ellaText}
             onChange={(e) => setEllaText(e.target.value)}
           />
-          <Button 
-            onClick={submitEllaAsk}
-            disabled={!ellaText.trim() || isSubmitting}
-            className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 shadow-lg text-white font-bold transition-all"
-            size="lg"
-          >
-            {isSubmitting ? "Sending..." : "Send to Isaac 💌"}
-          </Button>
+          <div className="flex flex-col gap-2">
+            <Button 
+              onClick={submitEllaAsk}
+              disabled={!ellaText.trim() || isSubmitting}
+              className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 shadow-lg text-white font-bold transition-all"
+              size="lg"
+            >
+              {isSubmitting ? "Sending..." : "Send to Isaac 💌"}
+            </Button>
+            <Button
+              onClick={onNext}
+              variant="ghost"
+              className="w-full text-rose-400 hover:text-rose-600 hover:bg-rose-50"
+              disabled={isSubmitting}
+            >
+              Skip for now ⏭️
+            </Button>
+          </div>
         </div>
       )}
 
