@@ -7,7 +7,7 @@ import { PlayerIdentity } from "@/components/PlayerIdentity";
 import { InboxDashboard } from "@/components/InboxDashboard";
 import { Leaderboard } from "@/components/Leaderboard";
 import ChatWidget from "@/components/ChatWidget";
-import { usePlayerPresence } from "@/hooks/usePlayerPresence";
+import { PartnerStatusWidget } from "@/components/PartnerStatusWidget";
 
 export default function Index() {
   const game = useGameState();
@@ -90,6 +90,7 @@ export default function Index() {
 
   return (
     <>
+      <PartnerStatusWidget playerRole={game.playerRole} gameMode={game.gameMode} />
       {renderContent()}
       <ChatWidget gameMode={game.gameMode} playerRole={game.playerRole} />
     </>
