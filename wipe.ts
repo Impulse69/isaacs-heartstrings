@@ -18,6 +18,11 @@ async function wipe() {
   console.log("Wiping player_identities...");
   await supabase.from("player_identities").delete().in("role", ["isaac", "ella"]);
 
+  // Also catch the location table if it was created
+  console.log("Wiping player_locations (just in case)...");
+  try {
+    await supabase.from("player_locations").delete().neq("role", "");
+  } catch(e) { /* ignore if doesn't exist */ }
   console.log("Database is freshly wiped. Ready for Ella.");
 }
 

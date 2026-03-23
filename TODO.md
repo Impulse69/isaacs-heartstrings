@@ -10,6 +10,7 @@
 - [ ] Implement proper persistence for the "Skip" decision (so it doesn't show up again in the same session)
 - [ ] Add transition animations for skipping questions
 - [ ] Verify image coverage (Ensure all 50 images are correctly sized and formatted)
+- [ ] Integrate neat, clean Telegram-style emojis for the chat and UI
 
 ## 📋 Tracked Metrics
 - **Puzzle Images Generated**: 17 / 50
