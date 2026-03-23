@@ -194,8 +194,8 @@ export default function QuestionCard({ question, onNext, gameMode, playerRole }:
         </div>
       )}
 
-      {/* Ella asking custom questions (Works in both modes) */}
-      {question.type === "ella_asks" && (
+      {/* Ella asking custom questions (Works in both modes, but text area is only for Ella) */}
+      {question.type === "ella_asks" && (playerRole === "ella" || (!isDistance)) && (
         <div className="w-full space-y-4 animate-fade-in mt-4 border-t border-rose-200 pt-4">
           <Textarea 
             placeholder="What do you want to ask Isaac?..."
@@ -221,6 +221,24 @@ export default function QuestionCard({ question, onNext, gameMode, playerRole }:
               Skip for now ⏭️
             </Button>
           </div>
+        </div>
+      )}
+
+      {/* Isaac viewing ella_asks in distance mode */}
+      {question.type === "ella_asks" && isDistance && playerRole === "isaac" && (
+        <div className="w-full space-y-4 animate-fade-in mt-4 text-center border-t border-primary/10 pt-4">
+            <div className="bg-primary/5 p-6 rounded-xl border border-primary/20">
+              <span className="text-3xl mb-2 block animate-pulse">💌</span>
+              <p className="text-sm font-semibold text-rose-500 mb-2">Ella's Turn to Ask</p>
+              <p className="text-xs text-muted-foreground">She might be thinking of a question for you... You can check your Inbox later to answer it!</p>
+            </div>
+            <Button
+              onClick={onNext}
+              className="w-full mt-4 bg-primary hover:bg-primary/90 text-primary-foreground active:scale-95 transition-transform shadow-md"
+              size="lg"
+            >
+              Continue Playing →
+            </Button>
         </div>
       )}
 
