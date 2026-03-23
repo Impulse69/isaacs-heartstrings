@@ -23,6 +23,12 @@ async function wipe() {
   try {
     await supabase.from("player_locations").delete().neq("role", "");
   } catch(e) { /* ignore if doesn't exist */ }
+
+  console.log("Wiping chat_messages...");
+  try {
+    await supabase.from("chat_messages").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+  } catch(e) { /* ignore if doesn't exist */ }
+  
   console.log("Database is freshly wiped. Ready for Ella.");
 }
 

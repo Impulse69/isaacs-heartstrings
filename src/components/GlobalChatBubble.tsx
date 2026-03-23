@@ -67,7 +67,7 @@ export const GlobalChatBubble = () => {
 
   return (
     <>
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-24 right-4 z-[60]">
         <Button
           size="icon"
           onClick={() => setIsOpen(true)}
@@ -88,8 +88,8 @@ export const GlobalChatBubble = () => {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
-            className="fixed bottom-24 right-6 w-80 sm:w-96 bg-white/95 backdrop-blur shadow-2xl rounded-3xl border border-rose-100 overflow-hidden z-50 flex flex-col"
-            style={{ maxHeight: "calc(100vh - 120px)" }}
+            className="fixed bottom-40 right-4 w-80 sm:w-96 bg-white/95 backdrop-blur shadow-2xl rounded-3xl border border-rose-100 overflow-hidden z-[60] flex flex-col"
+            style={{ maxHeight: "calc(100vh - 180px)" }}
           >
             <div className="bg-rose-500 p-4 flex justify-between items-center text-white">
               <h3 className="font-bold flex items-center gap-2">

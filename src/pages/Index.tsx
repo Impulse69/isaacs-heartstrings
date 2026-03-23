@@ -6,8 +6,8 @@ import { GameModeSelection } from "@/components/GameModeSelection";
 import { PlayerIdentity } from "@/components/PlayerIdentity";
 import { InboxDashboard } from "@/components/InboxDashboard";
 import { Leaderboard } from "@/components/Leaderboard";
-import { GlobalChatBubble } from "@/components/GlobalChatBubble";
 import ChatWidget from "@/components/ChatWidget";
+import { usePlayerPresence } from "@/hooks/usePlayerPresence";
 
 export default function Index() {
   const game = useGameState();
@@ -91,9 +91,6 @@ export default function Index() {
   return (
     <>
       {renderContent()}
-      {(game.playerRole === "ella" || (!game.playerRole && game.gameMode === "together")) && (
-        <GlobalChatBubble />
-      )}
       <ChatWidget gameMode={game.gameMode} playerRole={game.playerRole} />
     </>
   );

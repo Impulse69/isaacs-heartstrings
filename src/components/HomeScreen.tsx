@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { GlobalChatBubble } from "@/components/GlobalChatBubble";
 
 import { GameMode, PlayerRole } from "@/hooks/useGameState";
 
@@ -171,6 +172,9 @@ export default function HomeScreen({
           Sign out / Switch Device
         </Button>
       </div>
+      {(playerRole === "ella" || (!playerRole && gameMode === "together")) && (
+        <GlobalChatBubble />
+      )}
     </div>
   );
 }

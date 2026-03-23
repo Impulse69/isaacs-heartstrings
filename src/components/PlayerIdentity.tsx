@@ -47,6 +47,12 @@ export const PlayerIdentity: React.FC<PlayerIdentityProps> = ({ onVerify }) => {
       if (data) {
         // Role exists, check PIN
         if (data.pin_hash === pin) {
+          // Update last_active to trigger presence tracking
+          await supabase
+            .from('player_identities')
+            .update({ last_active: new Date().toISOString() })
+            .eq('role', selectedRole);
+            
           onVerify(selectedRole, pin);
         } else {
           toast({
