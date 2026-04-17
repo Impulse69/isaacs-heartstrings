@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion } from "framer-motion";
 import { GameQuestion } from "@/hooks/useGameState";
 
@@ -59,8 +58,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onClose, allQuestions 
   const rounds = Object.keys(records).map(Number).sort((a, b) => b - a); // Newest rounds first
 
   return (
-    <div className="flex flex-col min-h-[100dvh] bg-background">
-      <div className="flex items-center justify-between px-6 py-4 border-b bg-background/80 backdrop-blur-sm sticky top-0 z-10 shadow-sm">
+    <div className="flex flex-col h-[100dvh] w-full bg-background overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-4 border-b bg-background/80 backdrop-blur-sm shrink-0 shadow-sm">
         <h2 className="text-xl font-bold text-amber-500 flex items-center gap-2">
           <span>🏆</span> Speed Run Records
         </h2>
@@ -69,7 +68,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onClose, allQuestions 
         </Button>
       </div>
 
-      <div className="flex-1 px-4 py-6 overflow-x-hidden">
+      <div className="flex-1 min-h-0 w-full px-4 py-6 overflow-y-auto overflow-x-hidden">
         {loading ? (
           <div className="flex justify-center items-center h-full">
             <span className="text-4xl animate-spin">⏳</span>
@@ -80,8 +79,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onClose, allQuestions 
             <p>No records set yet. Start solving puzzles to see who is faster!</p>
           </div>
         ) : (
-          <ScrollArea className="h-full">
-            <div className="space-y-4 pb-20 w-full">
+          <div className="space-y-4 pb-20 w-full">
               {rounds.map((round, idx) => {
                 const isaacTime = records[round].isaac;
                 const ellaTime = records[round].ella;
@@ -150,8 +148,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onClose, allQuestions 
                   </motion.div>
                 );
               })}
-            </div>
-          </ScrollArea>
+          </div>
         )}
       </div>
     </div>
