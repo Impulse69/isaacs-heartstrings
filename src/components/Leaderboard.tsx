@@ -69,7 +69,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onClose, allQuestions 
         </Button>
       </div>
 
-      <div className="flex-1 p-6">
+      <div className="flex-1 px-4 py-6 overflow-x-hidden">
         {loading ? (
           <div className="flex justify-center items-center h-full">
             <span className="text-4xl animate-spin">⏳</span>
@@ -80,8 +80,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onClose, allQuestions 
             <p>No records set yet. Start solving puzzles to see who is faster!</p>
           </div>
         ) : (
-          <ScrollArea className="h-full pr-4">
-            <div className="space-y-4 pb-20">
+          <ScrollArea className="h-full">
+            <div className="space-y-4 pb-20 w-full">
               {rounds.map((round, idx) => {
                 const isaacTime = records[round].isaac;
                 const ellaTime = records[round].ella;
@@ -96,7 +96,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onClose, allQuestions 
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: idx * 0.05 }}
-                    className="bg-card text-card-foreground p-4 rounded-xl border shadow-sm flex flex-col gap-3"
+                    className="bg-card text-card-foreground p-4 rounded-xl border shadow-sm flex flex-col gap-3 w-full max-w-full overflow-hidden"
                   >
                     <div className="flex justify-between items-center bg-muted/50 -mx-4 -mt-4 p-3 rounded-t-xl border-b mb-1 gap-2">
                       <div className="flex flex-col min-w-0 flex-1">
