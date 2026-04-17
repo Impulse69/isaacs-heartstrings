@@ -123,26 +123,27 @@ export default function HomeScreen({
               {totalAnswered > 0 ? "Continue Playing 💕" : "Start Playing 💕"}
             </Button>
             
-            {gameMode === "apart" && onOpenLeaderboard && (
-              <Button
-                onClick={onOpenLeaderboard}
-                size="lg"
-                variant="outline"
-                className="w-full border-amber-300 text-amber-600 hover:bg-amber-50 active:scale-95 transition-transform text-base gap-2 shadow-sm"
-              >
-                🏆 View Leaderboard
-              </Button>
-            )}
-
-            {gameMode === "apart" && playerRole === "isaac" && onOpenInbox && (
-              <Button
-                onClick={onOpenInbox}
-                size="lg"
-                variant="outline"
-                className="w-full border-rose-300 text-rose-600 hover:bg-rose-50 active:scale-95 transition-transform text-base gap-2 shadow-sm"
-              >
-                💌 View Ella's Inbox
-              </Button>
+            {gameMode === "apart" && (onOpenLeaderboard || (playerRole === "isaac" && onOpenInbox)) && (
+              <div className={`grid gap-2 ${playerRole === "isaac" && onOpenInbox && onOpenLeaderboard ? "grid-cols-2" : "grid-cols-1"}`}>
+                {onOpenLeaderboard && (
+                  <Button
+                    onClick={onOpenLeaderboard}
+                    variant="outline"
+                    className="border-amber-300 text-amber-600 hover:bg-amber-50 active:scale-95 transition-transform gap-1 shadow-sm h-11"
+                  >
+                    🏆 Leaderboard
+                  </Button>
+                )}
+                {playerRole === "isaac" && onOpenInbox && (
+                  <Button
+                    onClick={onOpenInbox}
+                    variant="outline"
+                    className="border-rose-300 text-rose-600 hover:bg-rose-50 active:scale-95 transition-transform gap-1 shadow-sm h-11"
+                  >
+                    💌 Inbox
+                  </Button>
+                )}
+              </div>
             )}
 
             {totalAnswered > 0 && (
