@@ -140,20 +140,20 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ allQuestions, on
                     <p className="text-sm font-semibold text-rose-500 mb-2 leading-tight">
                       Ella asked:
                     </p>
-                    <p className="text-lg text-foreground italic font-medium relative z-10 pl-2 border-l-2 border-rose-100 py-1 mb-4">
+                    <p className="text-lg text-gray-900 font-semibold relative z-10 pl-2 border-l-2 border-rose-200 py-1 mb-4">
                       "{ask.question_text}"
                     </p>
-                    
+
                     {ask.answer_text ? (
                       <div className="bg-rose-50 p-3 rounded-xl mt-3">
-                        <p className="text-xs text-rose-400 font-semibold mb-1 uppercase tracking-wider">Your Answer:</p>
-                        <p className="text-sm text-foreground">{ask.answer_text}</p>
+                        <p className="text-xs text-rose-500 font-semibold mb-1 uppercase tracking-wider">Your Answer:</p>
+                        <p className="text-sm text-gray-900">{ask.answer_text}</p>
                       </div>
                     ) : (
                       <div className="space-y-3 mt-4">
                         <Textarea
                           placeholder="Type your answer here..."
-                          className="w-full text-sm resize-none focus:ring-rose-300"
+                          className="w-full text-sm resize-none focus:ring-rose-300 text-gray-900 placeholder:text-gray-500 bg-white border-gray-300"
                           rows={2}
                           value={replyText[ask.id] || ""}
                           onChange={(e) => setReplyText(prev => ({ ...prev, [ask.id]: e.target.value }))}
@@ -199,7 +199,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ allQuestions, on
                       <p className="text-sm font-semibold text-rose-500 mb-2 leading-tight">
                         {question.text}
                       </p>
-                      <p className="text-lg text-foreground italic font-medium relative z-10 pl-2 border-l-2 border-rose-100 py-1">
+                      <p className="text-lg text-gray-900 font-semibold relative z-10 pl-2 border-l-2 border-rose-200 py-1">
                         "{ans.answer_text}"
                       </p>
                       <div className="mt-3 text-[10px] text-muted-foreground text-right uppercase tracking-wider font-semibold">
