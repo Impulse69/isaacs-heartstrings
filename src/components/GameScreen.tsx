@@ -73,7 +73,7 @@ export default function GameScreen({
 
   const handleNext = useCallback(async () => {
     // Save completion time to Supabase if in Distance mode
-    if (gameMode === "apart" && playerRole && currentQuestion) {
+    if (gameMode === "apart" && playerRole && currentQuestion && currentQuestion.type !== "ella_asks") {
       try {
         await supabase.from("game_records").insert([{
           player_role: playerRole,

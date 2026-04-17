@@ -49,7 +49,7 @@ export default function Index() {
 
     // + Leaderboard View
     if (showLeaderboard && game.gameMode === "apart") {
-      return <Leaderboard allQuestions={game.allQuestions} onClose={() => setShowLeaderboard(false)} />;
+      return <Leaderboard allQuestions={game.allQuestions} playerRole={game.playerRole} onClose={() => setShowLeaderboard(false)} />;
     }
 
     // 3. Normal Game Flow

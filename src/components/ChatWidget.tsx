@@ -97,7 +97,16 @@ export default function ChatWidget({ gameMode, playerRole }: ChatWidgetProps) {
   const [partnerTyping, setPartnerTyping] = useState(false);
   const [viewingImage, setViewingImage] = useState<string | null>(null);
   const [kbOffset, setKbOffset] = useState(0);
-  const [unread, setUnread] = useState(0);
+  const lastReadKey = `chat-last-read-${playerRole ?? "guest"}`;
+  const [lastReadAt, setLastReadAt] = useState<number>(() => {
+    if (typeof window === "undefined") return 0;
+    const stored = window.localStorage.getItem(lastReadKey);
+    return stored ? Number(stored) : 0;
+  });
+  const unread = useMemo(
+    () => messages.filter((m) => m.sender_role !== playerRole && new Date(m.created_at).getTime() > lastReadAt).length,
+    [messages, lastReadAt, playerRole]
+  );
 
   const scrollEndRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -134,9 +143,6 @@ export default function ChatWidget({ gameMode, playerRole }: ChatWidgetProps) {
         (payload) => {
           const msg = payload.new as ChatMessage;
           setMessages((prev) => (prev.some((m) => m.id === msg.id) ? prev : [...prev, msg]));
-          if (msg.sender_role !== playerRole && !isOpenRef.current) {
-            setUnread((u) => u + 1);
-          }
         }
       )
       .subscribe();
@@ -150,8 +156,12 @@ export default function ChatWidget({ gameMode, playerRole }: ChatWidgetProps) {
   const isOpenRef = useRef(isOpen);
   useEffect(() => {
     isOpenRef.current = isOpen;
-    if (isOpen) setUnread(0);
-  }, [isOpen]);
+    if (isOpen) {
+      const now = Date.now();
+      setLastReadAt(now);
+      try { window.localStorage.setItem(lastReadKey, String(now)); } catch { /* ignore */ }
+    }
+  }, [isOpen, lastReadKey]);
 
   // Typing indicator channel
   useEffect(() => {

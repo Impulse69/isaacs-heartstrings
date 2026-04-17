@@ -7,6 +7,7 @@ import { GameQuestion } from "@/hooks/useGameState";
 interface LeaderboardProps {
   onClose: () => void;
   allQuestions?: GameQuestion[];
+  playerRole?: "isaac" | "ella" | null;
 }
 
 interface GameRecord {
@@ -17,7 +18,17 @@ interface GameRecord {
   created_at: string;
 }
 
-export const Leaderboard: React.FC<LeaderboardProps> = ({ onClose, allQuestions = [] }) => {
+export const Leaderboard: React.FC<LeaderboardProps> = ({ onClose, allQuestions = [], playerRole }) => {
+  const handleClearRecords = async () => {
+    if (!window.confirm("Wipe ALL speed run records for both players? This can't be undone.")) return;
+    const { error } = await supabase.from("game_records").delete().gte("round_index", -100000);
+    if (error) {
+      alert("Failed to clear: " + error.message);
+    } else {
+      setRecords({});
+    }
+  };
+
   const [records, setRecords] = useState<Record<number, { isaac?: number; ella?: number }>>({});
   const [loading, setLoading] = useState(true);
 
@@ -63,9 +74,16 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onClose, allQuestions 
         <h2 className="text-xl font-bold text-amber-500 flex items-center gap-2">
           <span>🏆</span> Speed Run Records
         </h2>
-        <Button variant="ghost" size="sm" onClick={onClose} className="rounded-full">
-          Close
-        </Button>
+        <div className="flex items-center gap-1">
+          {playerRole === "isaac" && (
+            <Button variant="ghost" size="sm" onClick={handleClearRecords} className="rounded-full text-xs text-muted-foreground hover:text-red-500">
+              Clear
+            </Button>
+          )}
+          <Button variant="ghost" size="sm" onClick={onClose} className="rounded-full">
+            Close
+          </Button>
+        </div>
       </div>
 
       <div className="flex-1 min-h-0 w-full px-4 py-6 overflow-y-auto overflow-x-hidden">
