@@ -99,40 +99,51 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onClose, allQuestions 
                     className="bg-card text-card-foreground p-4 rounded-xl border shadow-sm flex flex-col gap-3"
                   >
                     <div className="flex justify-between items-center bg-muted/50 -mx-4 -mt-4 p-3 rounded-t-xl border-b mb-1 gap-2">
-                      <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest truncate">
-                        {question ? question.text : `Challenge`}
-                      </span>
+                      <div className="flex flex-col min-w-0 flex-1">
+                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                          Challenge #{idx + 1}
+                        </span>
+                        {question && (
+                          <span className="text-xs text-foreground/80 font-medium truncate mt-0.5">
+                            {question.text}
+                          </span>
+                        )}
+                      </div>
                       <span className="text-xl shrink-0">
-                        {winner === "isaac" ? "👑" : winner === "ella" ? "👑" : "⚔️"}
+                        {winner ? "👑" : "⚔️"}
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-3">
                       {/* Isaac Card */}
-                      <div className={`p-3 rounded-lg border flex flex-col items-center justify-center transition-all ${
-                        isaacTime !== undefined && (ellaTime === undefined || isaacTime < ellaTime) 
-                        ? "bg-rose-50 dark:bg-rose-950/30 border-rose-200 dark:border-rose-900 ring-2 ring-rose-300 dark:ring-rose-800 ring-offset-2 dark:ring-offset-background" 
-                        : "bg-muted/30 border-muted opacity-80"
+                      <div className={`p-3 rounded-lg border flex flex-col items-center justify-center transition-all min-h-[84px] ${
+                        isaacTime === undefined
+                        ? "bg-transparent border-dashed border-muted-foreground/30"
+                        : winner === "isaac"
+                        ? "bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800 ring-2 ring-rose-300 dark:ring-rose-700"
+                        : "bg-muted/40 dark:bg-muted/20 border-border"
                       }`}>
                         <div className="text-sm font-semibold text-rose-500 mb-1">Isaac</div>
-                        {isaacTime ? (
+                        {isaacTime !== undefined ? (
                           <div className="text-2xl font-black text-foreground">{isaacTime.toFixed(1)}<span className="text-sm font-normal text-muted-foreground ml-1">sec</span></div>
                         ) : (
-                          <div className="text-sm text-muted-foreground italic h-8 flex items-center">Pending...</div>
+                          <div className="text-xs text-muted-foreground italic">Pending…</div>
                         )}
                       </div>
 
                       {/* Ella Card */}
-                      <div className={`p-3 rounded-lg border flex flex-col items-center justify-center transition-all ${
-                        ellaTime !== undefined && (isaacTime === undefined || ellaTime < isaacTime) 
-                        ? "bg-pink-50 dark:bg-pink-950/30 border-pink-200 dark:border-pink-900 ring-2 ring-pink-300 dark:ring-pink-800 ring-offset-2 dark:ring-offset-background" 
-                        : "bg-muted/30 border-muted opacity-80"
+                      <div className={`p-3 rounded-lg border flex flex-col items-center justify-center transition-all min-h-[84px] ${
+                        ellaTime === undefined
+                        ? "bg-transparent border-dashed border-muted-foreground/30"
+                        : winner === "ella"
+                        ? "bg-pink-50 dark:bg-pink-950/40 border-pink-200 dark:border-pink-800 ring-2 ring-pink-300 dark:ring-pink-700"
+                        : "bg-muted/40 dark:bg-muted/20 border-border"
                       }`}>
                         <div className="text-sm font-semibold text-pink-500 mb-1">Ella</div>
-                        {ellaTime ? (
+                        {ellaTime !== undefined ? (
                           <div className="text-2xl font-black text-foreground">{ellaTime.toFixed(1)}<span className="text-sm font-normal text-muted-foreground ml-1">sec</span></div>
                         ) : (
-                          <div className="text-sm text-muted-foreground italic h-8 flex items-center">Pending...</div>
+                          <div className="text-xs text-muted-foreground italic">Pending…</div>
                         )}
                       </div>
                     </div>
