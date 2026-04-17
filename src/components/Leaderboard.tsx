@@ -3,9 +3,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion } from "framer-motion";
+import { GameQuestion } from "@/hooks/useGameState";
 
 interface LeaderboardProps {
   onClose: () => void;
+  allQuestions?: GameQuestion[];
 }
 
 interface GameRecord {
@@ -16,7 +18,7 @@ interface GameRecord {
   created_at: string;
 }
 
-export const Leaderboard: React.FC<LeaderboardProps> = ({ onClose }) => {
+export const Leaderboard: React.FC<LeaderboardProps> = ({ onClose, allQuestions = [] }) => {
   const [records, setRecords] = useState<Record<number, { isaac?: number; ella?: number }>>({});
   const [loading, setLoading] = useState(true);
 
@@ -83,20 +85,26 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onClose }) => {
               {rounds.map((round, idx) => {
                 const isaacTime = records[round].isaac;
                 const ellaTime = records[round].ella;
+                const question = allQuestions.find((q) => q.id === round);
+                const winner = isaacTime !== undefined && ellaTime !== undefined
+                  ? (isaacTime < ellaTime ? "isaac" : "ella")
+                  : null;
 
                 return (
-                  <motion.div 
+                  <motion.div
                     key={round}
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: idx * 0.05 }}
                     className="bg-card text-card-foreground p-4 rounded-xl border shadow-sm flex flex-col gap-3"
                   >
-                    <div className="flex justify-between items-center bg-muted/50 -mx-4 -mt-4 p-3 rounded-t-xl border-b mb-1">
-                      <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
-                        Round {round + 1}
+                    <div className="flex justify-between items-center bg-muted/50 -mx-4 -mt-4 p-3 rounded-t-xl border-b mb-1 gap-2">
+                      <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest truncate">
+                        {question ? question.text : `Challenge`}
                       </span>
-                      <span className="text-xl">⚔️</span>
+                      <span className="text-xl shrink-0">
+                        {winner === "isaac" ? "👑" : winner === "ella" ? "👑" : "⚔️"}
+                      </span>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">

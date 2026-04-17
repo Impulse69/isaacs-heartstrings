@@ -73,11 +73,11 @@ export default function GameScreen({
 
   const handleNext = useCallback(async () => {
     // Save completion time to Supabase if in Distance mode
-    if (gameMode === "apart" && playerRole) {
+    if (gameMode === "apart" && playerRole && currentQuestion) {
       try {
         await supabase.from("game_records").insert([{
           player_role: playerRole,
-          round_index: totalAnswered,
+          round_index: currentQuestion.id,
           completion_time: elapsed
         }]);
       } catch (err) {
@@ -88,7 +88,7 @@ export default function GameScreen({
     onAnswered();
     setPhase("puzzle");
     setPuzzleKey((k) => k + 1);
-  }, [onAnswered, gameMode, playerRole, elapsed, totalAnswered]);
+  }, [onAnswered, gameMode, playerRole, elapsed, currentQuestion]);
 
   if (isComplete || !currentQuestion) {
     return (

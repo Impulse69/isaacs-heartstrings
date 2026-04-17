@@ -297,19 +297,16 @@ export default function ChatWidget({ gameMode, playerRole }: ChatWidgetProps) {
       )}
 
       {/* Chat overlay — full screen on mobile, floating card on desktop */}
-      <AnimatePresence>
-        {isOpen && createPortal(
+      {isOpen && createPortal(
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex sm:items-center sm:justify-end"
+            className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex sm:items-center sm:justify-end"
             onClick={(e) => { if (e.target === e.currentTarget) setIsOpen(false); }}
           >
             <motion.div
               initial={{ y: "100%", opacity: 0.5 }}
               animate={{ y: 0, opacity: 1 }}
-              exit={{ y: "100%", opacity: 0.5 }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
               className="flex flex-col w-full h-[100dvh] sm:h-[85vh] sm:max-h-[720px] sm:w-[420px] sm:mr-6 sm:rounded-2xl bg-white dark:bg-zinc-900 shadow-2xl overflow-hidden"
               style={{ paddingBottom: kbOffset ? `${kbOffset}px` : undefined }}
@@ -500,16 +497,13 @@ export default function ChatWidget({ gameMode, playerRole }: ChatWidgetProps) {
           </motion.div>,
           document.body
         )}
-      </AnimatePresence>
 
       {/* Image lightbox */}
-      <AnimatePresence>
-        {viewingImage && createPortal(
+      {viewingImage && createPortal(
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-black/90 flex items-center justify-center p-4"
+            className="fixed inset-0 z-[10000] bg-black/90 flex items-center justify-center p-4"
             onClick={() => setViewingImage(null)}
           >
             <img src={viewingImage} alt="preview" className="max-h-full max-w-full object-contain" />
@@ -523,7 +517,6 @@ export default function ChatWidget({ gameMode, playerRole }: ChatWidgetProps) {
           </motion.div>,
           document.body
         )}
-      </AnimatePresence>
     </>
   );
 }
